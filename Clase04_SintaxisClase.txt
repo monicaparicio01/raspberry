@@ -1,8 +1,0 @@
-class Operaciones:
-   def __init__(self,a):
-	self.var = 0
-	sentencias
-   def suma(self):
-        sentencias
-   def resta(self):
-        sentencias
