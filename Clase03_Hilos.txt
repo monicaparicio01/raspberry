@@ -1,4 +1,0 @@
-import threading as th
-
-hilo = th.Thread(target = nombreFuncion)
-hilo.start()
