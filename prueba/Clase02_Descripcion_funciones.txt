@@ -1,0 +1,5 @@
+def nombre_funcion(lista_parametros):
+   sentencia1
+   sentencia2
+   sentencia3
+   return valores

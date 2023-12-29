@@ -1,0 +1,19 @@
+Libreria: tkinter
+# import tkinter
+# from tkinter import *
+
+Objeto:
+w = tkinter.Tk()
+w.title("Mi titulo")
+w.geometry("400x200")
+w.mainloop()
+
+Widgets ==> Elementos
+fm = tkinter.Frame(w)
+fm.grid(row=0,column=0)
+bt = tkinter.Button(fm,text="Aceptar",command=funcion,height=2,width=20)
+bt.grid(row=1,column=0)
+lb = tkinter.Label(fm,text="Etiqueta")
+lb = tkinter.Label(fm,textvariable=etiqueta)
+txt = tkinter.Text(fm)
+sl = tkinter.Scale(fm,from_=0,to=20,orient = tkinter.HORIZONTAL)
