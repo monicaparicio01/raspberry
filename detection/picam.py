@@ -1,34 +1,30 @@
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import time
-import numpy as np
 import cv2
-# initialize the camera and grab a reference to the raw camera capture
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 32
-camera.rotation = 180
 
-rawCapture = PiRGBArray(camera, size=(640, 480))
-# allow the camera to warmup
-time.sleep(0.1)
+# Inicializar la cámara USB (asegúrate de tenerla conectada al puerto USB)
+cap = cv2.VideoCapture(0)
+
+# Inicializar el clasificador HOG para la detección de personas
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
+while True:
+    # Capturar el cuadro de la cámara USB
+    ret, frame = cap.read()
 
-# capture frames from the camera
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    # Realizar la detección de personas
+    boxes, weights = hog.detectMultiScale(frame, winStride=(8, 8))
 
-    image = frame.array
+    # Dibujar un rectángulo alrededor de las personas detectadas
+    for (x, y, w, h) in boxes:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    boxes, weights = hog.detectMultiScale(image, winStride=(8,8) )
-    boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
-    for (xA, yA, xB, yB) in boxes:
-        # display the detected boxes in the colour picture
-        cv2.rectangle(image, (xA, yA), (xB, yB),(0, 255, 0), 2)
-    cv2.imshow("Frame", image);
-    key = cv2.waitKey(1) & 0xFF
-    rawCapture.truncate(0)
-    if key == ord("q"):
-       break
+    # Mostrar la imagen resultante
+    cv2.imshow('Person Detection', frame)
+
+    # Salir del bucle si se presiona la tecla 'q'
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Liberar la captura de la cámara y cerrar la ventana
+cap.release()
+cv2.destroyAllWindows()
